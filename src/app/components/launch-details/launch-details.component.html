@@ -1,0 +1,72 @@
+<main class="container">
+  <a mat-button routerLink="/">
+    <mat-icon>arrow_back</mat-icon>
+    Back to launches
+  </a>
+
+  @if (loading$ | async) {
+    <mat-progress-bar mode="indeterminate" aria-label="Loading launch details" />
+  }
+
+  @if (error$ | async; as error) {
+    <p class="error-message" role="alert">{{ error }}</p>
+  }
+
+  @if (launch$ | async; as launch) {
+    @let favorite = favorite$ | async;
+    <mat-card class="details-card">
+      <mat-card-header>
+        @if (launch.links.mission_patch) {
+          <img
+            mat-card-avatar
+            [src]="launch.links.mission_patch"
+            [alt]="launch.mission_name + ' mission patch'"
+          >
+        }
+        <mat-card-title>{{ launch.mission_name }}</mat-card-title>
+        <mat-card-subtitle>Flight #{{ launch.flight_number }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <dl class="launch-facts">
+          <div><dt>Launch date</dt><dd>{{ launch.launch_date_local | date:'medium' }}</dd></div>
+          <div><dt>Rocket</dt><dd>{{ launch.rocket.rocket_name }} ({{ launch.rocket.rocket_type }})</dd></div>
+          <div><dt>Launch site</dt><dd>{{ launch.launch_site.site_name_long }}</dd></div>
+          <div>
+            <dt>Result</dt>
+            <dd>{{ launch.launch_success ? 'Success' : launch.launch_success === false ? 'Failure' : 'Unknown' }}</dd>
+          </div>
+          <div class="details-description">
+            <dt>Mission details</dt>
+            <dd>{{ launch.details || 'No mission details are available.' }}</dd>
+          </div>
+        </dl>
+      </mat-card-content>
+
+      <mat-card-actions>
+        <button
+          mat-button
+          type="button"
+          [attr.aria-label]="favorite ? 'Remove from favorites' : 'Add to favorites'"
+          [matTooltip]="favorite ? 'Remove from favorites' : 'Add to favorites'"
+          (click)="toggleFavorite(launch.flight_number)"
+        >
+          <mat-icon>{{ favorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+          {{ favorite ? 'Favorited' : 'Add to favorites' }}
+        </button>
+        @if (launch.links.article_link) {
+          <a mat-button [href]="launch.links.article_link" target="_blank" rel="noopener noreferrer">
+            Read article
+          </a>
+        }
+        @if (launch.links.video_link) {
+          <a mat-button [href]="launch.links.video_link" target="_blank" rel="noopener noreferrer">
+            Watch launch
+          </a>
+        }
+      </mat-card-actions>
+    </mat-card>
+  } @else if (!(loading$ | async)) {
+    <p class="empty-state">Launch not found.</p>
+  }
+</main>

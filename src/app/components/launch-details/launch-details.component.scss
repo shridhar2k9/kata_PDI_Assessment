@@ -1,0 +1,44 @@
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.details-card {
+  margin-top: 16px;
+}
+
+.launch-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin: 24px 0;
+}
+
+.launch-facts div {
+  min-width: 0;
+}
+
+.launch-facts dt {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.launch-facts dd {
+  margin: 0;
+}
+
+.details-description {
+  grid-column: 1 / -1;
+}
+
+.error-message {
+  color: #c82222;
+}
+
+.empty-state {
+  color: #64748b;
+  margin-top: 24px;
+}
